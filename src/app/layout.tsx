@@ -8,7 +8,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 export const metadata: Metadata = {
   title: "Athena's Labyrinth of Wisdom",
   description: "maze",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/logo.svg", type: "image/svg+xml" }],
 };
 
 const geist = Geist({
