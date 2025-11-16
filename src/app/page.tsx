@@ -121,4 +121,169 @@ export default function Home() {
               </div>
             </div>
           </>
-       
+        ) : (
+          <div className="flex min-h-screen w-full flex-col">
+            <div className="flex items-center gap-4 border-b border-white/10 p-4">
+              <button
+                onClick={() => setShowCharacterSelection(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-all hover:bg-white/20"
+              >
+                ←
+              </button>
+              <div className="flex flex-1 items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/30 to-purple-500/30 text-xl font-bold text-white">
+                  A
+                </div>
+                <h2 className="text-xl font-bold text-white">
+                  Labyrinth of Wisdom
+                </h2>
+              </div>
+            </div>
+
+            <div className="border-b border-white/10 p-8">
+              <div className="mx-auto flex max-w-7xl justify-center gap-6 overflow-x-auto">
+                {characters
+                  .slice(0, Math.ceil(characters.length / 2))
+                  .map((character, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCharacterIndex(index)}
+                      className={`group relative flex w-48 flex-col items-center gap-4 rounded-lg border p-6 transition-all sm:w-56 md:w-64 lg:w-72 ${
+                        characterIndex === index
+                          ? "border-blue-400 bg-blue-500/30 shadow-lg"
+                          : "border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10"
+                      }`}
+                    >
+                      <div className="flex h-48 w-full items-center justify-center overflow-hidden rounded-lg sm:h-56 md:h-64 lg:h-72">
+                        {character.image && (
+                          <img
+                            src={character.image}
+                            alt={character.name}
+                            className="h-full w-full object-contain"
+                            onError={(e) => {
+                              console.error(
+                                "Failed to load grid image:",
+                                character.image,
+                              );
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="w-full text-center">
+                        <div className="text-lg font-semibold text-white sm:text-xl md:text-2xl lg:text-3xl">
+                          {character.name}
+                        </div>
+                      </div>
+                      {characterIndex === index && (
+                        <div className="absolute top-3 right-3 text-3xl text-blue-400">
+                          ✓
+                        </div>
+                      )}
+                    </button>
+                  ))}
+              </div>
+            </div>
+
+            <div className="flex flex-1 items-center justify-center p-8">
+              <div className="flex w-full max-w-4xl flex-col items-center gap-6 rounded-2xl border border-white/20 bg-black p-6 md:p-12">
+                <div className="flex h-96 w-96 items-center justify-center overflow-hidden rounded-lg md:h-[500px] md:w-[500px] lg:h-[600px] lg:w-[600px]">
+                  {characters[characterIndex]?.image && (
+                    <img
+                      key={characterIndex}
+                      src={characters[characterIndex].image}
+                      alt={characters[characterIndex].name}
+                      className="h-full w-full object-contain"
+                      onError={(e) => {
+                        console.error(
+                          "Failed to load image:",
+                          characters[characterIndex]?.image,
+                        );
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-white md:text-3xl">
+                    {characters[characterIndex]?.name}
+                  </h3>
+                  <p className="mt-2 text-sm text-white/70 md:text-base">
+                    {characters[characterIndex]?.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-white/10 p-8">
+              <div className="mx-auto flex max-w-7xl justify-center gap-6 overflow-x-auto">
+                {characters
+                  .slice(Math.ceil(characters.length / 2))
+                  .map((character, index) => {
+                    const actualIndex =
+                      Math.ceil(characters.length / 2) + index;
+                    return (
+                      <button
+                        key={actualIndex}
+                        onClick={() => setCharacterIndex(actualIndex)}
+                        className={`group relative flex w-48 flex-col items-center gap-4 rounded-lg border p-6 transition-all sm:w-56 md:w-64 lg:w-72 ${
+                          characterIndex === actualIndex
+                            ? "border-blue-400 bg-blue-500/30 shadow-lg"
+                            : "border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10"
+                        }`}
+                      >
+                        <div className="flex h-48 w-full items-center justify-center overflow-hidden rounded-lg sm:h-56 md:h-64 lg:h-72">
+                          {character.image && (
+                            <img
+                              src={character.image}
+                              alt={character.name}
+                              className="h-full w-full object-contain"
+                              onError={(e) => {
+                                console.error(
+                                  "Failed to load grid image:",
+                                  character.image,
+                                );
+                              }}
+                            />
+                          )}
+                        </div>
+                        <div className="w-full text-center">
+                          <div className="text-lg font-semibold text-white sm:text-xl md:text-2xl lg:text-3xl">
+                            {character.name}
+                          </div>
+                        </div>
+                        {characterIndex === actualIndex && (
+                          <div className="absolute top-3 right-3 text-3xl text-blue-400">
+                            ✓
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <div className="border-t border-white/10 p-6">
+              <div className="flex justify-center">
+                <button
+                  onClick={() => {
+                    const selectedCharacter = characters[characterIndex];
+                    if (selectedCharacter) {
+                      router.push(
+                        `/playnow?character=${encodeURIComponent(selectedCharacter.name)}&image=${encodeURIComponent(selectedCharacter.image)}`,
+                      );
+                    }
+                  }}
+                  className="group rounded-xl border border-yellow-500 bg-yellow-500 px-10 py-4 text-xl font-semibold text-white shadow-2xl transition-all hover:scale-105 hover:bg-yellow-600 hover:shadow-[0_8px_32px_0_rgba(234,179,8,0.4)]"
+                >
+                  Begin Journey
+                  <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">
+                    →
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
