@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import Image from "next/image";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 const BASE_MAZE = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -43,7 +44,7 @@ function generateRandomMaze(): number[][] {
 
   riddleCells.forEach((cell) => {
     const row = maze[cell.row];
-    if (row && row[cell.col] !== undefined) {
+    if (row?.[cell.col] !== undefined) {
       row[cell.col] = 4;
     }
   });
@@ -129,7 +130,7 @@ function PlayNowContent() {
   const [hasWon, setHasWon] = useState(false);
   const [hasLost, setHasLost] = useState(false);
   const [moves, setMoves] = useState(0);
-  const [hearts, setHearts] = useState(2);
+  const hearts = 2;
   const [showRiddle, setShowRiddle] = useState(false);
   const [currentRiddle, setCurrentRiddle] = useState<{
     question: string;
@@ -139,8 +140,8 @@ function PlayNowContent() {
   const [answeredRiddles, setAnsweredRiddles] = useState<Set<string>>(
     new Set(),
   );
-  const characterName = searchParams.get("character") || "Athena";
-  const characterImage = searchParams.get("image") || "/avatar/girl-base.png";
+  const characterName = searchParams.get("character") ?? "Athena";
+  const characterImage = searchParams.get("image") ?? "/avatar/girl-base.png";
 
   useEffect(() => {
     setMaze(generateRandomMaze());
@@ -160,58 +161,56 @@ function PlayNowContent() {
     }
   }, [maze]);
 
-  const handleMove = (direction: "up" | "down" | "left" | "right") => {
-    if (hasWon || hasLost) return;
-    if (showRiddle) return;
+  const handleMove = useCallback(
+    (direction: "up" | "down" | "left" | "right") => {
+      if (hasWon || hasLost) return;
+      if (showRiddle) return;
 
-    let newRow = playerPos.row;
-    let newCol = playerPos.col;
+      let newRow = playerPos.row;
+      let newCol = playerPos.col;
 
-    switch (direction) {
-      case "up":
-        newRow = Math.max(0, playerPos.row - 1);
-        break;
-      case "down":
-        newRow = Math.min(maze.length - 1, playerPos.row + 1);
-        break;
-      case "left":
-        newCol = Math.max(0, playerPos.col - 1);
-        break;
-      case "right":
-        newCol = Math.min((maze[0]?.length ?? 0) - 1, playerPos.col + 1);
-        break;
-    }
+      switch (direction) {
+        case "up":
+          newRow = Math.max(0, playerPos.row - 1);
+          break;
+        case "down":
+          newRow = Math.min(maze.length - 1, playerPos.row + 1);
+          break;
+        case "left":
+          newCol = Math.max(0, playerPos.col - 1);
+          break;
+        case "right":
+          newCol = Math.min((maze[0]?.length ?? 0) - 1, playerPos.col + 1);
+          break;
+      }
 
-    
-    const targetRow = maze[newRow];
-    if (
-      targetRow &&
-      targetRow[newCol] !== undefined &&
-      targetRow[newCol] !== 1
-    ) {
-      setPlayerPos({ row: newRow, col: newCol });
-      setMoves((prev) => prev + 1);
+      const targetRow = maze[newRow];
+      if (targetRow?.[newCol] !== undefined && targetRow[newCol] !== 1) {
+        setPlayerPos({ row: newRow, col: newCol });
+        setMoves((prev) => prev + 1);
 
-      const cellValue = targetRow[newCol];
+        const cellValue = targetRow[newCol];
 
-      if (cellValue === 4 && !showRiddle) {
-        const riddleKey = `${newRow}-${newCol}`;
-        if (!answeredRiddles.has(riddleKey)) {
-          const randomRiddle =
-            riddles[Math.floor(Math.random() * riddles.length)];
-          if (randomRiddle) {
-            setCurrentRiddle(randomRiddle);
-            setShowRiddle(true);
-            return; 
+        if (cellValue === 4 && !showRiddle) {
+          const riddleKey = `${newRow}-${newCol}`;
+          if (!answeredRiddles.has(riddleKey)) {
+            const randomRiddle =
+              riddles[Math.floor(Math.random() * riddles.length)];
+            if (randomRiddle) {
+              setCurrentRiddle(randomRiddle);
+              setShowRiddle(true);
+              return;
+            }
           }
         }
-      }
 
-      if (cellValue === 3) {
-        setHasWon(true);
+        if (cellValue === 3) {
+          setHasWon(true);
+        }
       }
-    }
-  };
+    },
+    [hasWon, hasLost, showRiddle, playerPos, maze, answeredRiddles, riddles],
+  );
 
   const handleRiddleAnswer = (selectedIndex: number) => {
     if (!currentRiddle) return;
@@ -259,13 +258,13 @@ function PlayNowContent() {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [playerPos, hasWon, hasLost, showRiddle]);
+  }, [handleMove, hasWon, hasLost, showRiddle]);
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-[url('/bg-athena.jpg')] bg-cover bg-fixed bg-center bg-no-repeat">
       <div className="absolute top-4 right-4 z-20 flex items-center gap-4">
         <div className="flex items-center gap-1">
-          {[...Array(2)].map((_, i) => (
+          {Array.from({ length: 2 }).map((_, i) => (
             <span key={i} className="text-2xl">
               {i < hearts ? "❤️" : "🤍"}
             </span>
@@ -306,9 +305,11 @@ function PlayNowContent() {
                       >
                         {isPlayer && (
                           <div className="relative z-10 flex h-full w-full items-center justify-center">
-                            <img
+                            <Image
                               src={characterImage}
                               alt={characterName}
+                              width={112}
+                              height={112}
                               className="h-full w-full object-contain"
                             />
                           </div>
@@ -362,7 +363,7 @@ function PlayNowContent() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
             <div className="flex max-w-md flex-col gap-6 rounded-2xl border-2 border-amber-600 bg-black p-8">
               <h2 className="text-center text-2xl font-bold text-white">
-                Athena's Riddle
+                Athena&apos;s Riddle
               </h2>
               <p className="text-center text-lg text-white">
                 {currentRiddle.question}
