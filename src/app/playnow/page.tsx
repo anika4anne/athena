@@ -5,26 +5,86 @@ import Image from "next/image";
 import { Suspense, useCallback, useEffect, useState } from "react";
 
 const BASE_MAZE = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 2, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-  [1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1],
-  [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-  [1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1,
+  ],
+  [
+    1, 2, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+  ],
+  [
+    1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1,
+    0, 1, 1, 0, 1,
+  ],
+  [
+    1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+    0, 1, 0, 0, 1,
+  ],
+  [
+    1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1,
+    1, 1, 0, 1, 1,
+  ],
+  [
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1,
+  ],
+  [
+    1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1,
+    1, 1, 1, 0, 1,
+  ],
+  [
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1,
+  ],
+  [
+    1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1,
+    1, 1, 1, 0, 1,
+  ],
+  [
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1,
+  ],
+  [
+    1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1,
+    0, 1, 1, 0, 1,
+  ],
+  [
+    1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1,
+    0, 1, 0, 0, 1,
+  ],
+  [
+    1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1,
+    0, 1, 0, 1, 1,
+  ],
+  [
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1,
+  ],
+  [
+    1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1,
+    1, 1, 1, 0, 1,
+  ],
+  [
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1,
+  ],
+  [
+    1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1,
+    0, 1, 1, 0, 1,
+  ],
+  [
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1,
+  ],
+  [
+    1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 0, 1,
+  ],
+  [
+    1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1,
+  ],
 ];
 
 function generateRandomMaze(): number[][] {
@@ -262,28 +322,28 @@ function PlayNowContent() {
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-[url('/bg-athena.jpg')] bg-cover bg-fixed bg-center bg-no-repeat">
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-4">
-        <div className="flex items-center gap-1">
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-2">
+        <div className="flex items-center gap-0.5">
           {Array.from({ length: 2 }).map((_, i) => (
-            <span key={i} className="text-2xl">
+            <span key={i} className="text-lg">
               {i < hearts ? "❤️" : "🤍"}
             </span>
           ))}
         </div>
         <button
           onClick={() => router.push("/")}
-          className="rounded-lg border border-amber-800 bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-red-700"
+          className="rounded-md border border-amber-800 bg-red-600 px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-red-700"
         >
           Exit
         </button>
       </div>
 
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-8 p-8">
-        <div className="flex flex-col items-center gap-4">
-          <div className="rounded-xl border-4 border-amber-800 bg-amber-100 p-4">
-            <div className="grid gap-1">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-4 p-4">
+        <div className="flex flex-col items-center gap-2">
+          <div className="rounded-lg border-2 border-amber-800 bg-amber-100 p-2">
+            <div className="grid gap-0.5">
               {maze.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex gap-1">
+                <div key={rowIndex} className="flex gap-0.5">
                   {row.map((cell, colIndex) => {
                     const isPlayer =
                       playerPos.row === rowIndex && playerPos.col === colIndex;
@@ -295,29 +355,29 @@ function PlayNowContent() {
                     return (
                       <div
                         key={`${rowIndex}-${colIndex}`}
-                        className={`flex h-16 w-16 items-center justify-center rounded text-sm transition-all sm:h-20 sm:w-20 md:h-24 md:w-24 lg:h-28 lg:w-28 ${
+                        className={`flex h-8 w-8 items-center justify-center rounded text-xs transition-all sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14 ${
                           cell === 1
                             ? "bg-gray-300"
                             : cell === 3
                               ? "bg-green-500"
                               : "bg-amber-700"
-                        } ${isPlayer ? "bg-blue-500 ring-2 ring-blue-300" : ""}`}
+                        } ${isPlayer ? "bg-blue-500 ring-1 ring-blue-300" : ""}`}
                       >
                         {isPlayer && (
                           <div className="relative z-10 flex h-full w-full items-center justify-center">
                             <Image
                               src={characterImage}
                               alt={characterName}
-                              width={112}
-                              height={112}
+                              width={56}
+                              height={56}
                               className="h-full w-full object-contain"
                             />
                           </div>
                         )}
                         {isRiddle && !isAnswered && (
-                          <div className="h-3 w-3 rounded-full bg-yellow-400"></div>
+                          <div className="h-1.5 w-1.5 rounded-full bg-yellow-400"></div>
                         )}
-                        {isEnd && <div className="text-2xl">🏆</div>}
+                        {isEnd && <div className="text-lg">🏆</div>}
                       </div>
                     );
                   })}
@@ -326,34 +386,34 @@ function PlayNowContent() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-1">
             <button
               onClick={() => handleMove("up")}
-              className="rounded-lg border border-amber-800 bg-amber-700 px-6 py-2 text-white transition-all hover:bg-amber-600"
+              className="rounded-md border border-amber-800 bg-amber-700 px-3 py-1 text-xs text-white transition-all hover:bg-amber-600"
             >
               ↑ Up
             </button>
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <button
                 onClick={() => handleMove("left")}
-                className="rounded-lg border border-amber-800 bg-amber-700 px-6 py-2 text-white transition-all hover:bg-amber-600"
+                className="rounded-md border border-amber-800 bg-amber-700 px-3 py-1 text-xs text-white transition-all hover:bg-amber-600"
               >
                 ← Left
               </button>
               <button
                 onClick={() => handleMove("right")}
-                className="rounded-lg border border-amber-800 bg-amber-700 px-6 py-2 text-white transition-all hover:bg-amber-600"
+                className="rounded-md border border-amber-800 bg-amber-700 px-3 py-1 text-xs text-white transition-all hover:bg-amber-600"
               >
                 Right →
               </button>
             </div>
             <button
               onClick={() => handleMove("down")}
-              className="rounded-lg border border-amber-800 bg-amber-700 px-6 py-2 text-white transition-all hover:bg-amber-600"
+              className="rounded-md border border-amber-800 bg-amber-700 px-3 py-1 text-xs text-white transition-all hover:bg-amber-600"
             >
               ↓ Down
             </button>
-            <p className="mt-4 text-sm text-amber-900">
+            <p className="mt-2 text-xs text-amber-900">
               Use arrow keys or WASD to move
             </p>
           </div>
@@ -361,14 +421,14 @@ function PlayNowContent() {
 
         {showRiddle && currentRiddle && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="flex max-w-md flex-col gap-6 rounded-2xl border-2 border-amber-600 bg-black p-8">
-              <h2 className="text-center text-2xl font-bold text-white">
+            <div className="flex max-w-sm flex-col gap-3 rounded-xl border-2 border-amber-600 bg-black p-4">
+              <h2 className="text-center text-lg font-bold text-white">
                 Athena&apos;s Riddle
               </h2>
-              <p className="text-center text-lg text-white">
+              <p className="text-center text-sm text-white">
                 {currentRiddle.question}
               </p>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 {currentRiddle.options.map((option, index) => (
                   <button
                     key={index}
@@ -377,7 +437,7 @@ function PlayNowContent() {
                       e.stopPropagation();
                       handleRiddleAnswer(index);
                     }}
-                    className="rounded-lg border-2 border-amber-600 bg-amber-800 px-6 py-3 text-lg font-semibold text-white transition-all hover:bg-amber-700"
+                    className="rounded-md border-2 border-amber-600 bg-amber-800 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-amber-700"
                   >
                     {option}
                   </button>
@@ -389,17 +449,17 @@ function PlayNowContent() {
 
         {hasWon && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="flex flex-col items-center gap-6 rounded-2xl border border-white/20 bg-black p-12">
-              <div className="text-6xl">🎉</div>
-              <h2 className="text-4xl font-bold text-white">
+            <div className="flex flex-col items-center gap-3 rounded-xl border border-white/20 bg-black p-6">
+              <div className="text-4xl">🎉</div>
+              <h2 className="text-2xl font-bold text-white">
                 You Escaped the Labyrinth!
               </h2>
-              <p className="text-xl text-white/70">
+              <p className="text-sm text-white/70">
                 Completed in {moves} moves
               </p>
               <button
                 onClick={() => router.push("/")}
-                className="rounded-lg bg-blue-500 px-10 py-4 text-xl font-semibold text-white transition-all hover:bg-blue-600"
+                className="rounded-md bg-blue-500 px-6 py-2 text-base font-semibold text-white transition-all hover:bg-blue-600"
               >
                 Return to Start
               </button>
@@ -409,13 +469,13 @@ function PlayNowContent() {
 
         {hasLost && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="flex flex-col items-center gap-6 rounded-2xl border border-red-500/20 bg-black p-12">
-              <div className="text-6xl">💔</div>
-              <h2 className="text-4xl font-bold text-white">Game Over</h2>
-              <p className="text-xl text-white/70">You ran out of lives!</p>
+            <div className="flex flex-col items-center gap-3 rounded-xl border border-red-500/20 bg-black p-6">
+              <div className="text-4xl">💔</div>
+              <h2 className="text-2xl font-bold text-white">Game Over</h2>
+              <p className="text-sm text-white/70">You ran out of lives!</p>
               <button
                 onClick={() => router.push("/")}
-                className="rounded-lg bg-red-500 px-10 py-4 text-xl font-semibold text-white transition-all hover:bg-red-600"
+                className="rounded-md bg-red-500 px-6 py-2 text-base font-semibold text-white transition-all hover:bg-red-600"
               >
                 Return to Start
               </button>
