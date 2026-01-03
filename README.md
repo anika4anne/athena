@@ -1,29 +1,33 @@
-# Create T3 App
+# Wisdom Of Labryinth
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+<img width="1721" height="1080" alt="image" src="https://github.com/user-attachments/assets/433bc03b-a424-4455-a8b7-57c27e2fbdc7" />
 
-## What's next? How do I make an app with this?
+This is our homepage, the transtion in the beginning was made with canva, you can click stat now, located at bottom of the screen to start the game
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+# Choosing a Avatar
+<img width="1346" height="1069" alt="image" src="https://github.com/user-attachments/assets/2bdea11f-1150-4f3a-b400-191e4a594e94" />
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+As you can see here, you can choose your avatar to play the game, we designed these avatars in ibis paint, and our logo located in top left in canva
+The characters are all Greek Gods (the game is a Greek Mythology Game)
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+#Game Starting
+<img width="1721" height="1067" alt="image" src="https://github.com/user-attachments/assets/316fc059-1145-4f66-9b77-1cfebad8980c" />
 
-## Learn More
+So now the game has started, the character you chose has to go through a maze, and the yellow dots in the boxes signify a question you have to anser,
+Keep in Mind: You only have 2 lives
+If you get a question wrong you lose a life, and if you get both questions wrong then you'll die
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+Try to make it out alive without losing all your lives!
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+#Answering a Question
+<img width="532" height="436" alt="image" src="https://github.com/user-attachments/assets/e46e4caf-2dd0-477f-9dde-fe0e40eaa0b4" />
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+You'll see a pop up like this asking you to answer the question, and you have to attempt to pick the right answer
 
-## How do I deploy this?
+#Correct
+If your correct, the game will keep going on
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+#Wrong
+If you get one wrong, you'll lose a heart on top right of the screen, and if you lose both of your hearts you'll see a message saying that you lost
+
+<img width="292" height="309" alt="image" src="https://github.com/user-attachments/assets/95f4bde2-94f0-4294-9d3e-e990e32c3ac1" />
